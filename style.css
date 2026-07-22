@@ -1,0 +1,480 @@
+/* ==========================================================================
+   Poems for Ranim — "Letters at Dusk"
+   A writing-desk theme: deep plum twilight behind warm ivory letters,
+   each sealed with wax until opened.
+   ========================================================================== */
+
+:root {
+  /* Color tokens */
+  --dusk-deep:     #2A1830;
+  --dusk-mid:      #472B4C;
+  --dusk-warm:     #6B3F55;
+  --paper:         #FBF1E2;
+  --paper-shade:   #ECDBBd;
+  --paper-line:    #E3CFAE;
+  --ink:           #3B2440;
+  --ink-soft:      #6B4B63;
+  --rose:          #C97B93;
+  --rose-deep:     #9C4F63;
+  --gold:          #C9A24E;
+  --gold-soft:     #E4CD93;
+  --sage:          #7C8A67;
+  --shadow-soft:   rgba(20, 8, 22, 0.35);
+  --shadow-hover:  rgba(20, 8, 22, 0.5);
+  --focus-glow:    rgba(201, 162, 78, 0.6);
+
+  /* Type roles */
+  --font-display: 'Cormorant Garamond', serif;
+  --font-script:  'Mrs Saint Delafield', cursive;
+  --font-body:    'EB Garamond', serif;
+
+  --poem-font-size: 16px;
+  --container-max: 480px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 20% -10%, rgba(201, 162, 78, 0.10), transparent 55%),
+    radial-gradient(ellipse at 90% 110%, rgba(201, 123, 147, 0.14), transparent 50%),
+    linear-gradient(165deg, var(--dusk-deep) 0%, var(--dusk-mid) 48%, var(--dusk-warm) 100%);
+  font-family: var(--font-body);
+  color: var(--ink);
+  overflow-x: hidden;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  animation: bodyFadeIn 1s ease-out;
+}
+
+@keyframes bodyFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Fine grain overlay for a paper/dusk atmosphere */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--rose-deep);
+  border-radius: 10px;
+  border: 2px solid var(--dusk-mid);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 56px 20px 90px;
+}
+
+/* ==========================================================================
+   Header / Title
+   ========================================================================== */
+
+.title-block {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.flourish {
+  display: block;
+  margin: 0 auto 14px;
+  width: 84px;
+  height: 20px;
+  opacity: 0;
+  animation: flourishFade 1s ease-out 0.1s forwards;
+}
+
+.flourish svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--gold-soft);
+  stroke-width: 1.1;
+}
+
+@keyframes flourishFade {
+  to { opacity: 0.75; }
+}
+
+.title-line {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--paper);
+  margin: 0;
+  line-height: 1.15;
+  font-size: 40px;
+  letter-spacing: 0.4px;
+
+  opacity: 0;
+  transform: translateY(14px);
+  animation: titleRise 0.9s ease-out 0.15s forwards;
+}
+
+.title-line-accent {
+  font-family: var(--font-script);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  color: var(--gold-soft);
+  margin-top: 6px;
+  transform: translateY(14px) rotate(-2deg);
+  animation-delay: 0.35s;
+}
+
+@keyframes titleRise {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-2deg);
+  }
+}
+.title-line.title-line-accent { animation-name: titleRiseAccent; }
+@keyframes titleRiseAccent {
+  to { opacity: 1; transform: translateY(0) rotate(-2deg); }
+}
+.title-line:not(.title-line-accent) {
+  animation-name: titleRisePlain;
+}
+@keyframes titleRisePlain {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 600px) {
+  .title-line { font-size: 48px; }
+  .title-line-accent { font-size: 36px; }
+}
+
+/* ==========================================================================
+   Letters (poem cards)
+   ========================================================================== */
+
+.poems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.poem-card {
+  position: relative;
+  background: var(--paper);
+  border-radius: 6px;
+  padding: 22px 20px 20px;
+  box-shadow:
+    0 2px 0 var(--paper-shade) inset,
+    0 14px 30px var(--shadow-soft);
+  transition: box-shadow 350ms ease, transform 350ms ease;
+
+  opacity: 0;
+  transform: scale(0.95) translateY(10px) rotate(0deg);
+}
+
+/* Each letter rests at a faint, distinct tilt -- like pages dropped on a desk */
+.poem-card[data-index="0"] { --tilt: -1.1deg; }
+.poem-card[data-index="1"] { --tilt: 0.9deg; }
+.poem-card[data-index="2"] { --tilt: -0.6deg; }
+.poem-card[data-index="3"] { --tilt: 1.2deg; }
+.poem-card[data-index="4"] { --tilt: -0.9deg; }
+.poem-card:nth-child(6n)   { --tilt: 0.7deg; }
+
+.poem-card.card-revealed {
+  animation: cardReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(var(--tilt, 0deg));
+  }
+}
+
+.poem-card.card-floating {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50% { transform: translateY(-4px) rotate(var(--tilt, 0deg)); }
+}
+
+@media (hover: hover) {
+  .poem-card:hover {
+    transform: translateY(-3px) rotate(0deg) scale(1.01);
+    box-shadow:
+      0 2px 0 var(--paper-shade) inset,
+      0 20px 40px var(--shadow-hover);
+  }
+}
+
+.poem-card.expanded {
+  transform: translateY(-2px) rotate(0deg);
+}
+
+/* torn deckled edge along the bottom of every letter */
+.poem-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 12px;
+  background: var(--paper);
+  clip-path: polygon(
+    0% 0%, 4% 100%, 8% 20%, 12% 100%, 16% 20%, 20% 100%, 24% 20%,
+    28% 100%, 32% 20%, 36% 100%, 40% 20%, 44% 100%, 48% 20%,
+    52% 100%, 56% 20%, 60% 100%, 64% 20%, 68% 100%, 72% 20%,
+    76% 100%, 80% 20%, 84% 100%, 88% 20%, 92% 100%, 96% 20%, 100% 100%, 100% 0%
+  );
+}
+
+/* Fold crease near the top of the letter */
+.poem-card::before {
+  content: "";
+  position: absolute;
+  top: 58px;
+  left: 14px;
+  right: 14px;
+  height: 1px;
+  background: var(--paper-line);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Letterhead: date + wax seal
+   ========================================================================== */
+
+.letter-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.date-badge {
+  font-family: var(--font-body);
+  font-variant: small-caps;
+  font-size: 15px;
+  letter-spacing: 0.6px;
+  color: var(--ink-soft);
+  padding-top: 10px;
+}
+
+/* The seal doubles as the open/close control */
+.seal-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.seal {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #E3B7C4, var(--rose) 45%, var(--rose-deep) 100%);
+  box-shadow:
+    0 3px 6px rgba(20, 8, 22, 0.35),
+    inset 0 -3px 6px rgba(80, 20, 40, 0.35),
+    inset 0 2px 3px rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 300ms ease;
+}
+
+.seal::after {
+  content: "R";
+  font-family: var(--font-script);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.seal-btn:hover .seal {
+  transform: scale(1.06);
+}
+
+.seal-btn:focus-visible {
+  outline: none;
+}
+.seal-btn:focus-visible .seal {
+  box-shadow:
+    0 0 0 4px var(--focus-glow),
+    0 3px 6px rgba(20, 8, 22, 0.35);
+}
+
+.seal-hint {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--ink-soft);
+  opacity: 0.75;
+  letter-spacing: 0.2px;
+}
+
+/* Seal "cracks" open when the letter is expanded */
+.poem-card.expanded .seal {
+  transform: rotate(28deg) scale(0.85);
+  box-shadow:
+    0 2px 4px rgba(20, 8, 22, 0.25),
+    inset 0 -2px 4px rgba(80, 20, 40, 0.3);
+}
+.poem-card.expanded .seal::after {
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   Letter body
+   ========================================================================== */
+
+.poem-preview {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 4px 0 2px;
+  opacity: 0.85;
+  transition: opacity 300ms ease, max-height 400ms ease;
+  max-height: 60px;
+}
+
+.poem-card.expanded .poem-preview {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.poem-body-wrap {
+  background: var(--lavender-card-inner);
+  border-radius: 24px;
+  margin-top: 26px;
+  overflow: hidden;
+  transition: max-height 600ms cubic-bezier(0.65, 0, 0.35, 1);
+  max-height: 5px;
+  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
+}
+
+.poem-card.expanded .poem-body-wrap {
+  max-height: 65vh; /* Expands dynamically to fit long poems */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.poem-text {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: var(--poem-font-size);
+  line-height: 1.9;
+  color: var(--ink);
+  text-align: center;
+  white-space: pre-line;
+  padding: 18px 6px 10px;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 500ms ease-in-out 150ms;
+}
+
+.poem-card.expanded .poem-text {
+  opacity: 1;
+}
+
+@media (min-width: 600px) {
+  .poem-text { font-size: 17px; }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 380px) {
+  .page { padding: 44px 14px 70px; }
+  .poem-card { padding: 20px 16px 18px; }
+}
+
+@media (min-width: 600px) {
+  .page { padding: 76px 20px 110px; }
+  .poems-container { gap: 40px; }
+  .poem-card { padding: 26px 26px 22px; }
+}
+
+/* ==========================================================================
+   Scroll reveal for letters entering the viewport later
+   ========================================================================== */
+
+.poem-card.scroll-hidden {
+  opacity: 0;
+  transform: translateY(24px) rotate(var(--tilt, 0deg));
+}
+
+.poem-card.scroll-visible {
+  animation: scrollFadeIn 0.7s ease-out forwards;
+}
+
+@keyframes scrollFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .poem-card.card-floating {
+    animation: none;
+  }
+}
